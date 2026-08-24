@@ -55,13 +55,24 @@ fun Greeting() {
                 .padding(innerPadding)
                 .fillMaxSize()
             ){
-                var text by remember { mutableStateOf("") }
+                var heightText by remember { mutableStateOf("") }
+                var weightText by remember{ mutableStateOf("")}
+
                 TextField(
-                    value=text,
+                    value=heightText,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = {newText->text = newText},
+                    onValueChange = {newHeight->heightText = newHeight},
                     placeholder = { Text("請輸入身高(cm)")},
                     modifier=Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth()
+                )
+                TextField(
+                    value = weightText,
+                    textStyle = TextStyle(fontSize = 20.sp),
+                    onValueChange = {newWeight->weightText=newWeight},
+                    placeholder = {Text("請輸入體重(kg)")},
+                    modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth()
                 )
