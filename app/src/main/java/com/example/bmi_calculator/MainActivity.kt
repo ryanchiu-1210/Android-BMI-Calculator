@@ -1,6 +1,10 @@
 package com.example.bmi_calculator
 
+import android.content.Context
+import android.net.wifi.WifiEnterpriseConfig
 import android.os.Bundle
+import android.renderscript.Sampler.Value
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Label
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -21,14 +24,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.util.VelocityTrackerAddPointsFix
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bmi_calculator.ui.theme.BMI_CalculatorTheme
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +52,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Greeting() {
+    var context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -57,7 +64,8 @@ fun Greeting() {
     ){innerPadding->
             Column(modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
+                .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ){
                 var heightText by remember { mutableStateOf("") }
                 var weightText by remember{ mutableStateOf("")}
@@ -83,23 +91,38 @@ fun Greeting() {
                 )
                 Button(
                     onClick = {
-                        var height :Int= heightText.toInt()/100
-                        var weight : Int = weightText.toInt()
-
+                        try{
+                            var height :Float= heightText.toInt()/100f
+                            var weight : Float= weightText.toFloat()
+                            output = Calculator(height,weight)
+                        }
+                        catch(e:Exception){
+                            Toast.makeText(context, "Format Error", Toast.LENGTH_SHORT).show()
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
-                        .clip(shape = RoundedCornerShape(20.dp))
+                        .clip(shape = RoundedCornerShape(10.dp))
                 ){
-                    Text("計算BMI")
+                    Text("計算BMI", fontSize = 20.sp)
                 }
+                Text(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                    text = "BMI值為:${output}", fontSize = 25.sp,
+                    textAlign = TextAlign.Center,
+                )
             }
     }
 }
 
-fun Calculator(height:Int,weight:Int): Int {
-    return weight/(height*height)
+
+
+fun Calculator(height:Float,weight:Float): String {
+    var bmi :Float= (weight/(height*height))
+    var formatted = "%.1f".format(bmi)
+    return formatted
 }
 @Preview(showBackground = true)
 @Composable
