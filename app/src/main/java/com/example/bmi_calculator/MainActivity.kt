@@ -97,6 +97,7 @@ fun Greeting() {
                             output = Calculator(height,weight)
                         }
                         catch(e:Exception){
+                            output=""
                             Toast.makeText(context, "Format Error", Toast.LENGTH_SHORT).show()
                         }
                     },
