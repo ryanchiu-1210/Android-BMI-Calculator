@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Label
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -19,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.util.VelocityTrackerAddPointsFix
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,6 +61,7 @@ fun Greeting() {
             ){
                 var heightText by remember { mutableStateOf("") }
                 var weightText by remember{ mutableStateOf("")}
+                var output by remember { mutableStateOf("") }
 
                 TextField(
                     value=heightText,
@@ -76,11 +81,26 @@ fun Greeting() {
                         .padding(10.dp)
                         .fillMaxWidth()
                 )
+                Button(
+                    onClick = {
+                        var height :Int= heightText.toInt()/100
+                        var weight : Int = weightText.toInt()
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .clip(shape = RoundedCornerShape(20.dp))
+                ){
+                    Text("計算BMI")
+                }
             }
     }
 }
 
-
+fun Calculator(height:Int,weight:Int): Int {
+    return weight/(height*height)
+}
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
