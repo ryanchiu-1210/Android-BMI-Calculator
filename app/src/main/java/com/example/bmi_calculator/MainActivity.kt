@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,9 +68,9 @@ fun Greeting() {
                 .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ){
-                var heightText by remember { mutableStateOf("") }
-                var weightText by remember{ mutableStateOf("")}
-                var output by remember { mutableStateOf("") }
+                var heightText by rememberSaveable { mutableStateOf("") }
+                var weightText by rememberSaveable { mutableStateOf("")}
+                var output by rememberSaveable { mutableStateOf("") }
 
                 TextField(
                     value=heightText,
@@ -125,6 +126,7 @@ fun Calculator(height:Float,weight:Float): String {
     var formatted = "%.1f".format(bmi)
     return formatted
 }
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
